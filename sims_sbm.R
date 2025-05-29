@@ -103,7 +103,7 @@ ggsave(file = "sims_sbm_p12.pdf", device="pdf", width=6, height=4, units="in")
 ### Increasing n
 
 n.iters=100
-n.seq=seq(250, 2000, 250)
+n.seq=seq(500, 2000, 250)
 
 p22 = 0.001
 p12 = 0.0075
@@ -157,7 +157,7 @@ df_plot$method[df_plot$method=="BE_python"] <- "cpnet"
 
 df_plot$method <- factor(df_plot$method, levels = c("Algorithm 1", "cpnet"))
 
-df_plot <- df_plot[3:16,]
+df_plot <- df_plot[1:14,]
 
 p1 <- ggplot(df_plot, aes(x=n, y=accuracy, color=method, linetype=method))+
   geom_line(linewidth=1.2)+
