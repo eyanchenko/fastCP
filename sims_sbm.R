@@ -9,8 +9,8 @@ library(RColorBrewer)
 
 #py_install("cpnet")
 
-source("~/Documents/Research/Srijan/Greedy_algorithm/Code/sims_functions.R")
-source_python('~/Documents/Research/Srijan/Greedy_algorithm/Code/cp_be.py')
+source("~/Documents/Research/Srijan/Greedy_algorithm_R1/Code/sims_functions.R")
+source_python('~/Documents/Research/Srijan/Greedy_algorithm_R1/Code/cp_be.py')
 
 ## Compare algorithm with that of CPnet and naive implementation
 
