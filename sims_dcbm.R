@@ -9,8 +9,8 @@ library(RColorBrewer)
 
 #py_install("cpnet")
 
-source("sims_functions.R")
-source_python('cp_be.py')
+source("~/Documents/Research/Srijan/Greedy_algorithm_R1/Code/sims_functions.R")
+source_python('~/Documents/Research/Srijan/Greedy_algorithm_R1/Code/cp_be.py')
 
 ### Increasing p12
 
@@ -21,9 +21,9 @@ p12.seq = seq(0.05, 0.15, length=11)
 p22=0.05
 
 
-df <- tibble(iter = rep(rep(1:n.iters,each=2), length(p12.seq)), 
-             method=rep(c("BE", "BE_python"), n.iters*length(p12.seq)), 
-             p12=0, class=0, time=0)
+df <- tibble(iter = rep(rep(1:n.iters,each=3), length(p12.seq)), 
+             method=rep(c("Algorithm 1", "Naive", "cpnet"), n.iters*length(p12.seq)), 
+             p12=0, class=0, time=0, ratio=0)
 
 cnt=1
 
@@ -47,31 +47,38 @@ for(p12 in p12.seq){
     end = proc.time()[3]
     df[cnt, 4] <- class_acc(C, Cstar)
     df[cnt, 5] <- end - start
+    df[cnt, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
+    
+    # Naive implementation
+    start = proc.time()[3]
+    C <- borgatti_naiveCpp(A)
+    end = proc.time()[3]
+    df[cnt+1, 4] <- class_acc(C, Cstar)
+    df[cnt+1, 5] <- end - start
+    df[cnt+1, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
     
     # CPnet
     start = proc.time()[3]
     C <- C_be(A)
     end = proc.time()[3]
-    df[cnt+1, 4] <- class_acc(C, Cstar)
-    df[cnt+1, 5] <- end - start 
+    df[cnt+2, 4] <- class_acc(C, Cstar)
+    df[cnt+2, 5] <- end - start 
+    df[cnt+2, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
     
-    cnt = cnt + 2
-    save(df, file = "sims_dcbm_p12.RData")
+    cnt = cnt + 3
+    print(iter)
+    save(df, file = "~/Documents/Research/Srijan/Greedy_algorithm_R1/Results/sims_dcbm_p12_103025.RData")
   }
   
   print(p12)
 }
 
 
-load("sims_dcbm_p12.RData")
+load("~/Documents/Research/Srijan/Greedy_algorithm_R1/Results/sims_dcbm_p12_103025.RData")
 
 df_plot <- df %>% group_by(p12, method) %>% summarise(accuracy = mean(class), time = mean(time))
 
-df_plot$method[df_plot$method=="BE"] <- "Algorithm 1"
-df_plot$method[df_plot$method=="BE_python"] <- "cpnet"
-
-
-df_plot$method <- factor(df_plot$method, levels = c("Algorithm 1", "cpnet"))
+df_plot$method <- factor(df_plot$method, levels = c("Algorithm 1", "Naive", "cpnet"))
 df_plot <- df_plot[1:22,]
 
 
@@ -98,7 +105,7 @@ p2 <- ggplot(df_plot, aes(x=p12, y=time, color=method, linetype=method))+
 
 ggarrange(p1, p2, nrow = 1, legend = "bottom", common.legend = TRUE)
 
-ggsave(file = "sims_dcbm_p12.pdf", device="pdf", width=6, height=4, units="in")
+ggsave(file = "~/Documents/Research/Srijan/Greedy_algorithm_R1/Figures/sims_dcbm_p12_103025.pdf", device="pdf", width=6, height=4, units="in")
 
 
 
@@ -111,8 +118,8 @@ p22 = 0.05
 p12 = 0.10
 p11 = 2*p12
 
-df <- tibble(iter = rep(rep(1:n.iters,each=2), length(n.seq)), 
-             method=rep(c("BE", "BE_python"), n.iters*length(n.seq)), 
+df <- tibble(iter = rep(rep(1:n.iters,each=3), length(n.seq)), 
+             method=rep(c("Algorithm 1", "Naive", "cpnet"), n.iters*length(n.seq)), 
              n=0, class=0, time=0)
 
 cnt=1
@@ -134,29 +141,37 @@ for(n in n.seq){
     end = proc.time()[3]
     df[cnt, 4] <- class_acc(C, Cstar)
     df[cnt, 5] <- end - start
+    df[cnt, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
     
-    # Cpnet
+    # Naive implementation
+    start = proc.time()[3]
+    C <- borgatti_naiveCpp(A)
+    end = proc.time()[3]
+    df[cnt+1, 4] <- class_acc(C, Cstar)
+    df[cnt+1, 5] <- end - start
+    df[cnt+1, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
+    
+    # CPnet
     start = proc.time()[3]
     C <- C_be(A)
     end = proc.time()[3]
-    df[cnt+1, 4] <- class_acc(C, Cstar)
-    df[cnt+1, 5] <- end - start 
+    df[cnt+2, 4] <- class_acc(C, Cstar)
+    df[cnt+2, 5] <- end - start 
+    df[cnt+2, 6] <- obj.fun(A, C) / obj.fun(A, Cstar)
     
-    cnt = cnt + 2
-    save(df, file = "sims_dcbm_n.RData")
+    cnt = cnt + 3
+    print(iter)
+    save(df, file = "~/Documents/Research/Srijan/Greedy_algorithm_R1/Results/sims_dcbm_n_103025.RData")
   }
   
   print(n)
 }
 
-load("sims_dcbm_n.RData")
+load("~/Documents/Research/Srijan/Greedy_algorithm_R1/Results/sims_dcbm_n_103025.RData")
 
 df_plot <- df %>% group_by(n, method) %>% summarise(accuracy = mean(class), time = mean(time))
 
-df_plot$method[df_plot$method=="BE"] <- "Algorithm 1"
-df_plot$method[df_plot$method=="BE_python"] <- "cpnet"
-
-df_plot$method <- factor(df_plot$method, levels = c("Algorithm 1", "cpnet"))
+df_plot$method <- factor(df_plot$method, levels = c("Algorithm 1", "Naive", "cpnet"))
 df_plot <- df_plot[1:14,]
 
 p1 <- ggplot(df_plot, aes(x=n, y=accuracy, color=method, linetype=method))+
@@ -180,7 +195,7 @@ p2 <- ggplot(df_plot, aes(x=n, y=time, color=method, linetype=method))+
 
 ggarrange(p1, p2, nrow = 1, legend = "bottom", common.legend = TRUE)
 
-ggsave(file = "sims_dcbm_n.pdf", device="pdf", width=6, height=4, units="in")
+ggsave(file = "~/Documents/Research/Srijan/Greedy_algorithm_R1/Figures/sims_dcbm_n_103025.pdf", device="pdf", width=6, height=4, units="in")
 
 
 
