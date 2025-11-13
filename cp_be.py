@@ -8,7 +8,7 @@ import networkx as nx
 
 def cp_be(A, rns=10):
     
-    algorithm = cpnet.BE(num_runs=rns)
+    algorithm = cpnet.BE(num_runs=int(rns))
     G = nx.from_numpy_array(A)
     algorithm.detect(G)
     x = algorithm.get_coreness()
