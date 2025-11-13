@@ -6,7 +6,7 @@ import networkx as nx
 # Input: Adjacency matrix, A
 # Output: CP labels, C
 
-def cp_be(A, rns=10):
+def cp_be(A, rns):
     
     algorithm = cpnet.BE(num_runs=int(rns))
     G = nx.from_numpy_array(A)

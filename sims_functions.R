@@ -1,6 +1,6 @@
 # Naive implementation where we recalculate the entire objective function each time.
 
-cppFunction('IntegerVector borgatti_naiveCpp(IntegerMatrix A){
+cppFunction('IntegerVector greedyNaive(IntegerMatrix A){
 
   double n = A.nrow();
   double m = n*(n-1)/2;
@@ -115,7 +115,7 @@ cppFunction('IntegerVector borgatti_naiveCpp(IntegerMatrix A){
 
 
 # Proposed implementation
-cppFunction('IntegerVector borgattiCpp(IntegerMatrix A){
+cppFunction('IntegerVector greedyFast(IntegerMatrix A){
 
   double n = A.nrow();
   double m = n*(n-1)/2;
@@ -431,8 +431,8 @@ class_acc <- function(Cpred, Ctrue){
 
 #source_python('~/Documents/Research/Srijan/Cp/cp_be.py')
 
-C_be <- function(A){
-  unlist(cp_be(A))
+C_be <- function(A, rns=10){
+  unlist(cp_be(A, rns))
 }
 
 
