@@ -6,9 +6,9 @@ import networkx as nx
 # Input: Adjacency matrix, A
 # Output: CP labels, C
 
-def cp_be(A):
+def cp_be(A, rns=10):
     
-    algorithm = cpnet.BE()
+    algorithm = cpnet.BE(num_runs=rns)
     G = nx.from_numpy_array(A)
     algorithm.detect(G)
     x = algorithm.get_coreness()
